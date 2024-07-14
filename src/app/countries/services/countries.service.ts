@@ -9,13 +9,25 @@ import { Region } from '../interfaces/region.type';
 export class CountriesService {
   private apiUrl: string = 'https://restcountries.com/v3.1';
 
+
+  private saveToLocalStorage() {
+    localStorage.setItem('cacheStore', JSON.stringify(this.chacheStore))
+  }
+  private loadFromLocalStorage() {
+    if(!localStorage.getItem('cacheStore')) return;
+
+    this.chacheStore = JSON.parse(localStorage.getItem('cacheStore')!);
+  }
+
   public chacheStore: CacheStore = {
     byCapital: {term: '', countries: []},
     byCountries: {term: '', countries: []},
     byRegion: {region: undefined, countries: []},
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.loadFromLocalStorage()
+  }
 
   private getCountriesRequest(url: string): Observable<Country[]> {
     return this.http.get<Country[]>(url)
@@ -45,7 +57,8 @@ export class CountriesService {
       .pipe(
         tap((countries) => this.chacheStore.byCapital = {
           term, countries
-        })
+        }),
+        tap(() => this.saveToLocalStorage())
       );
   }
 
@@ -57,7 +70,8 @@ export class CountriesService {
       .pipe(
         tap((countries) => this.chacheStore.byCountries = {
           term, countries
-        })
+        }),
+        tap(() => this.saveToLocalStorage())
       )
   }
 
@@ -69,7 +83,8 @@ export class CountriesService {
       .pipe(
         tap((countries) => this.chacheStore.byRegion = {
           countries,region
-        })
+        }),
+        tap(() => this.saveToLocalStorage())
       )
   }
 
