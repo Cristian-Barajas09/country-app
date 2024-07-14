@@ -1,0 +1,3 @@
+--inline-style --skip-tests
+
+ng g c countries/pages/byCapitalPage --inline-style --skip-tests
