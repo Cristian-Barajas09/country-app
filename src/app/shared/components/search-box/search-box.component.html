@@ -1,8 +1,10 @@
+<!-- (keyup.enter)="onEnterSearchBox(txtInput.value)" -->
 <input
-type="text"
-[placeholder]="placeholder"
-class="form-control"
-#txtInput
-(keyup.enter)="onEnterSearchBox(txtInput.value)"
+  type="text"
+  [placeholder]="placeholder"
+  class="form-control"
+  (keyup)="onKeyPress(txtInput.value)"
+  [value]="initialValue"
+  #txtInput
 >
 <!--.enter hace referencia a la tecla que espera a ser presionada-->
